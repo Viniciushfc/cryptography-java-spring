@@ -6,6 +6,8 @@ import com.viniciushfc.cryptography.infra.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserService {
 
@@ -21,4 +23,10 @@ public class UserService {
         saveUser(newUser);
         return newUser;
     }
+
+    public List<User> getAllUser(){
+        return this.repository.findAll();
+    }
+
+
 }
