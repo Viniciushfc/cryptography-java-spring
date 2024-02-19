@@ -1,10 +1,7 @@
 package com.viniciushfc.cryptography.entities;
 
 import com.viniciushfc.cryptography.dtos.UserDTO;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,7 +9,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "users")
+@Entity
+@Table(name = "users")
 public class User {
 
     @Id
@@ -23,11 +21,11 @@ public class User {
 
     private String creditCardToken;
 
-    private Long value;
+    private Long amount;
 
     public User(UserDTO dto) {
         this.userDocument = dto.userDocument();
         this.creditCardToken = dto.creditCardToken();
-        this.value = dto.value();
+        this.amount = dto.amount();
     }
 }
