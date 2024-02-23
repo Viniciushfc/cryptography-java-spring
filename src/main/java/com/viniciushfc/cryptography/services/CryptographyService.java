@@ -2,58 +2,56 @@ package com.viniciushfc.cryptography.services;
 
 import com.viniciushfc.cryptography.dtos.UserDTO;
 import com.viniciushfc.cryptography.entities.User;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.Cipher;
-import javax.crypto.KeyGenerator;
-import javax.crypto.SecretKey;
-import java.security.NoSuchAlgorithmException;
+import javax.crypto.spec.SecretKeySpec;
 import java.util.Base64;
 
 @Service
 public class CryptographyService {
 
-    private static final String AES = "AES";
+    private static final String SECRET_KEY = "mySecretKey12345";
 
-    public String encrypt(String plainText, SecretKey secretKey) throws Exception {
-        Cipher cipher = Cipher.getInstance(AES);
-        cipher.init(Cipher.ENCRYPT_MODE, secretKey);
-        byte[] encryptedBytes = cipher.doFinal(plainText.getBytes());
-        return Base64.getEncoder().encodeToString(encryptedBytes);
-    }
-
-    public String decrypt(String encryptedText, SecretKey secretKey) throws Exception {
-        Cipher cipher = Cipher.getInstance(AES);
-        cipher.init(Cipher.DECRYPT_MODE, secretKey);
-        byte[] encryptedBytes = Base64.getDecoder().decode(encryptedText);
-        byte[] decryptedBytes = cipher.doFinal(encryptedBytes);
-        return new String(decryptedBytes);
-    }
-
-    public SecretKey generateSecretKey() throws NoSuchAlgorithmException {
-        return KeyGenerator.getInstance(AES).generateKey();
-    }
-
-    public User condifyUser(UserDTO dto) throws Exception {
-        if (dto == null) {
-            throw new IllegalArgumentException("UserDTO cannot be null");
+    public String encode(String password) throws Exception {
+        try {
+            SecretKeySpec secretKeySpec = new SecretKeySpec(SECRET_KEY.getBytes(), "AES");
+            Cipher cipher = Cipher.getInstance("AES");
+            cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec);
+            byte[] encryptedBytes = cipher.doFinal(password.getBytes());
+            return Base64.getEncoder().encodeToString(encryptedBytes);
+        } catch (Exception e) {
+            throw new RuntimeException("Erro na criptografia");
         }
-
-        User userCondify = new User(dto);
-
-        SecretKey secretKey = generateSecretKey();
-
-
-        String encryptedUserDocument = encrypt(dto.userDocument(), secretKey);
-        String encryptedCreditCardToken = encrypt(dto.creditCardToken(), secretKey);
-
-
-        userCondify.setUserDocument(encryptedUserDocument);
-        userCondify.setCreditCardToken(encryptedCreditCardToken);
-
-        return userCondify;
     }
 
+    public String decrypt(String encryptedPassword) {
+        try {
+            SecretKeySpec secretKeySpec = new SecretKeySpec(SECRET_KEY.getBytes(), "AES");
+            Cipher cipher = Cipher.getInstance("AES");
+            cipher.init(Cipher.DECRYPT_MODE, secretKeySpec);
+            byte[] decryptedBytes = cipher.doFinal(Base64.getDecoder().decode(encryptedPassword));
+            return new String(decryptedBytes);
+        } catch (Exception e) {
+            throw new RuntimeException("Erro na descriptografia");
+        }
+    }
+
+    public User encryptUser(User user) throws Exception {
+
+        user.setUserDocument(encode(user.getUserDocument()));
+        user.setCreditCardToken(encode(user.getCreditCardToken()));
+
+        return user;
+
+    }
+
+    public User decryptUser(User user) {
+
+        User userDecrypt = user;
+        userDecrypt.setUserDocument(decrypt(user.getUserDocument()));
+        userDecrypt.setCreditCardToken(decrypt(user.getCreditCardToken()));
+
+        return userDecrypt;
+    }
 }
