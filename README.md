@@ -1,4 +1,26 @@
-# Criptografia
+# Solução
+
+Para resolver esse desafio, implementei uma solução que utiliza técnicas de criptografia para proteger os dados sensíveis. A criptografia é realizada em tempo de execução durante a conversão da entidade para a representação no banco de dados e vice-versa.
+
+## Exemplo dos dados incluído no Banco de Dados
+
+![Captura de tela 2024-02-26 182244](https://github.com/Viniciushfc/cryptography-java-spring/assets/89172416/f5c0811b-cf2a-4bbf-a4d8-b0d77a17940f)
+
+
+Nesse desafio foi utilizado as seguintes tecnologias:
+
+- Spring Web
+- Spring JPA
+- Spring Security
+- Spring Devtools
+- Lombok
+- PostgreSQL
+
+## Como usar
+
+
+
+## Criptografia
 
 Seu desafio será implementar a criptografia em um serviço de forma transparente para a API e para as camadas de
 serviço de sua aplicação. O objetivo é garantir que os campos sensíveis dos objetos de entidade não sejam visíveis
