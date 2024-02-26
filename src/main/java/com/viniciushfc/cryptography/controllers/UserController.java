@@ -5,7 +5,6 @@ import com.viniciushfc.cryptography.entities.User;
 import com.viniciushfc.cryptography.infra.exception.NotFoundData;
 import com.viniciushfc.cryptography.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -50,6 +49,16 @@ public class UserController {
             user = this.service.getUserById(id);
             return ResponseEntity.ok().body(user);
         } catch (NotFoundData e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Object> deleteUserById(@PathVariable Long id){
+        try{
+            this.service.deleteUserById(id);
+            return ResponseEntity.ok().body("Usuário deletado com sucesso!");
+        }catch (Exception e){
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
