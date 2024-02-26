@@ -48,10 +48,9 @@ public class CryptographyService {
 
     public User decryptUser(User user) {
 
-        User userDecrypt = user;
-        userDecrypt.setUserDocument(decrypt(user.getUserDocument()));
-        userDecrypt.setCreditCardToken(decrypt(user.getCreditCardToken()));
+        user.setUserDocument(decrypt(user.getUserDocument()));
+        user.setCreditCardToken(decrypt(user.getCreditCardToken()));
 
-        return userDecrypt;
+        return user;
     }
 }
