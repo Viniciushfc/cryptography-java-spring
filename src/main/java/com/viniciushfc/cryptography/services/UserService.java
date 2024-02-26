@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+
 @Service
 public class UserService {
 
@@ -35,7 +36,6 @@ public class UserService {
 
         User newUser = new User(dto);
         this.cryptographyService.encryptUser(newUser);
-        newUser.setAmount(dto.amount());
         saveUser(newUser);
         return newUser;
     }
@@ -63,11 +63,24 @@ public class UserService {
     public User updateUser(Long id, UserDTO dto) throws Exception {
         Optional<User> userOptional = Optional.ofNullable(this.repository.findById(id).orElseThrow(() -> new NotFoundData("Usuário não encontrado")));
 
+
         User user = userOptional.get();
-        user = cryptographyService.encryptUser(user);
+
+        this.cryptographyService.decryptUser(user);
+        user.setUserDocument(dto.userDocument());
+        user.setCreditCardToken(dto.creditCardToken());
         user.setAmount(dto.amount());
+        this.cryptographyService.encryptUser(user);
+
         saveUser(user);
 
         return user;
+    }
+
+    public void deleteUserById(Long id) {
+        if (repository.findById(id).isEmpty()) {
+            throw new NotFoundData("Usuário não existe!");
+        }
+        this.repository.deleteById(id);
     }
 }
