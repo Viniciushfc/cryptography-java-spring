@@ -18,7 +18,17 @@ Nesse desafio foi utilizado as seguintes tecnologias:
 
 ## Como usar
 
+Baixe o projeto em sua máquina, abra em um IDE de sua preferencia (exemplo: Intellij), configure sua aapplication propertie, suas propriedades do seu postgresql.
 
+(Detalhe para você visualizar os dados criptografados você devera abrir o pgAdmin).
+
+## Endpoints
+
+- POST: http://localhost:8080/users/create (Endpoint para criar um User);
+- PUT: http://localhost:8080/users/update/{id} (Endpoint para atualizar um User);
+- GET: http://localhost:8080/users (Endpoint para buscar todos os User cadastrados);
+- GET: http://localhost:8080/users/{id} (Endpoint para buscar um User específicopor ID);
+- DELETE: http://localhost:8080/users/delete/{id} (Endpoint para deletar um User específico por ID);
 
 ## Criptografia
 
